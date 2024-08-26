@@ -26,13 +26,13 @@
     {
         if (Ad is null)
         {
-            return AdData.styles[AdType.Error];
+            return AdData.Styles[AdType.Error];
         }
 
-        if (AdData.styles.ContainsKey(Ad.AdStyle))
+        if (AdData.Styles.ContainsKey(Ad.AdStyle))
         {
-            return AdData.styles[Ad.AdStyle];
+            return AdData.Styles[Ad.AdStyle];
         }
-        return AdData.styles[AdType.Plain];
+        return AdData.Styles[AdType.Plain];
     }
 }
