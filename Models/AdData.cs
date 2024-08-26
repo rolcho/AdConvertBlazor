@@ -2,9 +2,9 @@ namespace AdConvert.Models;
 
 public class AdData
 {
-    public string AdId { get; set; } = String.Empty;
-    public string StrongText { get; set; } = String.Empty;
-    public string AdText { get; set; } = String.Empty;
+    public string AdId { get; set; } = string.Empty;
+    public string StrongText { get; set; } = string.Empty;
+    public string AdText { get; set; } = string.Empty;
     public AdType AdStyle { get; set; } = AdType.Plain;
 
     public static readonly Dictionary<AdType, string> Styles =
