@@ -1,0 +1,34 @@
+﻿@page "/"
+@using static AdContent
+
+<PageTitle>Hirdetés átalakító</PageTitle>
+
+<AdList Ads="@ads" />
+
+@code {
+    private AdData[] ads = new AdData[]
+    {
+        new AdData
+        {
+            AdId = "*12345*",
+            StrongText = "This",
+            AdText = " is my yellow ad!",
+            AdStyle = AdType.YellowBackground
+        },
+        new AdData
+        {
+            AdId = "*1234g*",
+            StrongText = "This",
+            AdText = " is my circle ad!",
+            AdStyle = AdType.Circle
+        },
+        new AdData
+        {
+            AdId = "*12345*",
+            StrongText = "This",
+            AdText = " is my black ad!",
+            AdStyle = AdType.BlackBackground
+        } 
+    };
+
+}
