@@ -1,0 +1,17 @@
+bin/
+obj/
+.vs/
+.vscode/
+**/*.sln
+**/*.user
+**/*.userosscache
+**/*.suo
+**/*.ntvs*
+**/*.nupkg
+**/node_modules/
+**/packages/
+**/wwwroot/
+**/ClientSecrets.json
+**/appsettings.json
+**/appsettings.Development.json
+**/appsettings.Production.json
