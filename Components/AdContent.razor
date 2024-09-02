@@ -1,15 +1,22 @@
-﻿@inherits ComponentBase
+﻿@using System.Web
+
+@inherits ComponentBase
 
 <article class="@GetStyleClass()">
     @if (Ad is not null)
     {
-        <p class="text-lg">
-            <strong>@Ad.StrongText</strong>
-            @Ad.AdText
-        </p>
-        <p class="text-right text-xs">
-        @Ad.AdId
-    </p>
+        @if (Ad.AdStyle == AdType.Header)
+        {
+            <h1 class="text-2xl font-bold">@Ad.StrongText</h1>
+        }
+        else
+        {
+            <p class="text-lg text-justify">
+                <strong>@Ad.StrongText</strong>
+                @Ad.AdText
+            </p>
+            <p class="text-xs text-right"> @Ad.AdId </p>
+        }
     }
     else
     {
@@ -33,6 +40,8 @@
         {
             return AdData.Styles[Ad.AdStyle];
         }
+
         return AdData.Styles[AdType.Plain];
     }
+
 }

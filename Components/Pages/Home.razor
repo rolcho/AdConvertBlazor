@@ -1,34 +1,26 @@
 ﻿@page "/"
 @using static AdContent
+@using System.Text
 
 <PageTitle>Hirdetés átalakító</PageTitle>
 
 <AdList Ads="@ads" />
 
 @code {
-    private AdData[] ads = new AdData[]
+
+    private readonly AdHandler adHandler = new AdHandler();
+    private string? text;
+    private List<AdData>? ads;
+
+    protected override void OnInitialized()
     {
-        new AdData
-        {
-            AdId = "*12345*",
-            StrongText = "This",
-            AdText = " is my yellow ad!",
-            AdStyle = AdType.YellowBackground
-        },
-        new AdData
-        {
-            AdId = "*1234g*",
-            StrongText = "This",
-            AdText = " is my circle ad!",
-            AdStyle = AdType.Circle
-        },
-        new AdData
-        {
-            AdId = "*12345*",
-            StrongText = "This",
-            AdText = " is my black ad!",
-            AdStyle = AdType.BlackBackground
-        } 
-    };
+        string filePath = "wwwroot/sample.txt";
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        byte[] ansiBytes = File.ReadAllBytes(filePath);
+        byte[] utf8Bytes = Encoding.Convert(Encoding.GetEncoding("windows-1250"), Encoding.UTF8, ansiBytes);
+        text = adHandler.ReplaceText(Encoding.UTF8.GetString(utf8Bytes));
+        Console.WriteLine(text);
+        ads = adHandler.ConvertText(text);
+    }
 
 }

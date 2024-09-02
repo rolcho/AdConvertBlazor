@@ -3,7 +3,7 @@ using AdConvert.Models;
 
 namespace AdConvert.Services;
 
-public class AdTextHandler
+public class AdHandler
 {
     private static readonly Dictionary<string, string> ConversionTable =
         new()
@@ -29,6 +29,8 @@ public class AdTextHandler
             { "Ł", "ü" },
             { "<0x0171>", "ű" },
             { "<ANSI-WIN>\n", "" },
+            { "<ANSI-WIN>\r", "" },
+            { "\r", "" },
         };
 
     private static AdType StyleSelector(string line)
@@ -74,13 +76,18 @@ public class AdTextHandler
 
     private static readonly string[] idSeparator = ["sorszam>", "SOR>"];
 
-    public static List<AdData> ConvertText(string text)
+    public string ReplaceText(string text)
     {
         foreach (var item in ConversionTable)
         {
             text = text.Replace(item.Key, item.Value);
         }
 
+        return text;
+    }
+
+    public List<AdData> ConvertText(string text)
+    {
         var lines = text.Split("\n");
         var currentAd = new AdData();
         List<AdData> adList = [];
@@ -88,6 +95,7 @@ public class AdTextHandler
         foreach (var line in lines)
         {
             var shortLine = line.Replace("<pstyle:APRO\\:", "");
+            shortLine = shortLine.Replace("<pstyle:APRÓ\\:", "");
 
             if (shortLine.Contains("sorszam>") || shortLine.Contains("SOR>"))
             {
@@ -108,7 +116,7 @@ public class AdTextHandler
                 continue;
             }
 
-            if (currentAd.AdText != String.Empty)
+            if (currentAd.AdText != "")
             {
                 currentAd.AdText += " " + shortLine;
                 continue;
