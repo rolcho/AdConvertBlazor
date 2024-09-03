@@ -14,5 +14,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine
 WORKDIR /app
 
 COPY --from=build /app/out .
+COPY --from=build /app/wwwroot ./wwwroot
 
 CMD ["dotnet", "AdConvert.dll"]

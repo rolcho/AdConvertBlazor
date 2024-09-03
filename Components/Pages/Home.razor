@@ -1,6 +1,6 @@
 ﻿@page "/"
-@using static AdContent
 @using System.Text
+@using AdConvert.Components.Ads
 
 <PageTitle>Hirdetés átalakító</PageTitle>
 
@@ -19,7 +19,6 @@
         byte[] ansiBytes = File.ReadAllBytes(filePath);
         byte[] utf8Bytes = Encoding.Convert(Encoding.GetEncoding("windows-1250"), Encoding.UTF8, ansiBytes);
         text = adHandler.ReplaceText(Encoding.UTF8.GetString(utf8Bytes));
-        Console.WriteLine(text);
         ads = adHandler.ConvertText(text);
     }
 

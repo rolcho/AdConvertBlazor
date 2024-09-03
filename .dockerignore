@@ -10,7 +10,7 @@ obj/
 **/*.nupkg
 **/node_modules/
 **/packages/
-**/wwwroot/
+# **/wwwroot/
 **/ClientSecrets.json
 **/appsettings.json
 **/appsettings.Development.json

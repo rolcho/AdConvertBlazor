@@ -1,4 +1,3 @@
-using System;
 using AdConvert.Models;
 
 namespace AdConvert.Services;
@@ -33,45 +32,27 @@ public class AdHandler
             { "\r", "" },
         };
 
+    private static readonly Dictionary<string, AdType> StyleTable =
+        new()
+        {
+            { "APRO_fej", AdType.Header },
+            { "APRÓ fej", AdType.Header },
+            { "KNEGA\\", AdType.HighlightBackground },
+            { "PNEGATIV\\", AdType.HighlightBackground },
+            { "KKERETES\\", AdType.HighlightFrame },
+            { "PKERETES\\", AdType.HighlightFrame },
+            { "NEGATIV\\", AdType.BlackBackground },
+            { "FKERETES\\", AdType.BlackFrame },
+            { "SARGA\\", AdType.YellowBackground },
+            { "SZURKE\\", AdType.GrayBackground },
+            { "KISERO\\", AdType.LightRedBackground },
+            { "KARIKAS\\", AdType.Circle },
+        };
+
     private static AdType StyleSelector(string line)
     {
-        if (line.Contains("KNEGA\\") || line.Contains("PNEGATIV\\"))
-        {
-            return AdType.HighlightBackground;
-        }
-        if (line.Contains("KKERETES\\") || line.Contains("PKERETES\\"))
-        {
-            return AdType.HighlightFrame;
-        }
-        if (line.Contains("NEGATIV\\"))
-        {
-            return AdType.BlackBackground;
-        }
-        if (line.Contains("FKERETES\\"))
-        {
-            return AdType.BlackFrame;
-        }
-        if (line.Contains("SARGA\\"))
-        {
-            return AdType.YellowBackground;
-        }
-        if (line.Contains("SZURKE\\"))
-        {
-            return AdType.GrayBackground;
-        }
-        if (line.Contains("KISERO\\"))
-        {
-            return AdType.LightRedBackground;
-        }
-        if (line.Contains("KARIKAS\\"))
-        {
-            return AdType.Circle;
-        }
-        if (line.Contains("APRO_fej") || line.Contains("APRÓ fej"))
-        {
-            return AdType.Header;
-        }
-        return AdType.Plain;
+        AdType? adType = StyleTable.FirstOrDefault(style => line.Contains(style.Key)).Value;
+        return adType ?? AdType.Plain;
     }
 
     private static readonly string[] idSeparator = ["sorszam>", "SOR>"];
