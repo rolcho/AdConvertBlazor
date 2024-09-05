@@ -1,16 +1,29 @@
 ﻿@inject ClipboardService ClipboardService
 @inject IFileHandler FileHandler
+@rendermode InteractiveServer
 
 @inherits ComponentBase
 
-<button
-    class="w-full p-4 font-black text-white uppercase rounded-md bg-slate-400 hover:bg-slate-300 hover:text-slate-600"
-    @onclick="CopyToClipboard">Hirdetések
-    másolása vágólapra</button>
+<button class="w-full p-4 font-black text-white text-2xl rounded-md bg-slate-400 hover:bg-slate-300 hover:text-slate-600"
+    @onclick="CopyToClipboard">
+    @if (!pasted) {
+        <p>
+            Hirdetések másolása vágólapra
+        </p>
+    }
+    else {
+        <p>
+            Hirdetések átmásolva
+    </p>
+    }
+
+</button>
 
 @code {
     [Parameter]
     public List<AdData>? ads { get; set; }
+
+    bool pasted = false;
 
     async Task CopyToClipboard()
     {
@@ -18,7 +31,11 @@
         try
         {
             await ClipboardService.WriteTextAsync(FileHandler.CreateText(ads));
-            Console.WriteLine("success");
+            pasted = true;
+            StateHasChanged();
+            await Task.Delay(3000);
+            pasted = false;
+            StateHasChanged();
         }
         catch
         {
