@@ -11,6 +11,7 @@ namespace AdConvert
 
             builder.Services.AddSingleton<AdHandler>();
             builder.Services.AddScoped<IFileHandler, FileHandler>();
+            builder.Services.AddScoped<ClipboardService>();
             builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
             var app = builder.Build();

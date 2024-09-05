@@ -1,20 +1,28 @@
-﻿@inject IFileHandler FileHandler
+﻿@inject ClipboardService ClipboardService
+@inject IFileHandler FileHandler
+
 @inherits ComponentBase
 
 <button
     class="w-full p-4 font-black text-white uppercase rounded-md bg-slate-400 hover:bg-slate-300 hover:text-slate-600"
-    @onclick="DownloadFile" disabled="ads is null || fileName is null">Hirdetések
-    letöltése</button>
+    @onclick="CopyToClipboard">Hirdetések
+    másolása vágólapra</button>
 
 @code {
     [Parameter]
     public List<AdData>? ads { get; set; }
 
-    [Parameter]
-    public string? fileName { get; set; }
-
-    public async Task DownloadFile()
+    async Task CopyToClipboard()
     {
-
+        if (ads is null) return;
+        try
+        {
+            await ClipboardService.WriteTextAsync(FileHandler.CreateText(ads));
+            Console.WriteLine("success");
+        }
+        catch
+        {
+            Console.WriteLine("Cannot write text to clipboard");
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace AdConvert.Services;
 public interface IFileHandler
 {
     Task<List<AdData>> ReadFileContentAsync(IBrowserFile file);
-    Task CreateFileAsync(List<AdData> ads, string fileName);
+    string CreateText(List<AdData> ads);
 }
 
 public class FileHandler : IFileHandler
@@ -33,13 +33,15 @@ public class FileHandler : IFileHandler
         stream.Close();
         stream.Dispose();
 
-        await CreateFileAsync(ads, file.Name);
-
         return ads;
     }
 
-    public async Task CreateFileAsync(List<AdData> ads, string fileName)
+    public string CreateText(List<AdData>? ads)
     {
+        if (ads is null)
+        {
+            return string.Empty;
+        }
         var sb = new StringBuilder();
         foreach (var ad in ads)
         {
@@ -50,20 +52,6 @@ public class FileHandler : IFileHandler
             }
         }
 
-        using var stream = new MemoryStream();
-        using var writer = new StreamWriter(stream);
-
-        writer.Write(sb.ToString());
-
-        await writer.FlushAsync();
-        stream.Position = 0;
-
-        await File.WriteAllBytesAsync($"NYERS-{fileName}", stream.ToArray());
-
-        stream.Close();
-        stream.Dispose();
-
-        writer.Close();
-        writer.Dispose();
+        return sb.ToString() ?? "";
     }
 }
