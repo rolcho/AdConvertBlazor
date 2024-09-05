@@ -1,0 +1,20 @@
+﻿@inject IFileHandler FileHandler
+@inherits ComponentBase
+
+<button
+    class="w-full p-4 font-black text-white uppercase rounded-md bg-slate-400 hover:bg-slate-300 hover:text-slate-600"
+    @onclick="DownloadFile" disabled="ads is null || fileName is null">Hirdetések
+    letöltése</button>
+
+@code {
+    [Parameter]
+    public List<AdData>? ads { get; set; }
+
+    [Parameter]
+    public string? fileName { get; set; }
+
+    public async Task DownloadFile()
+    {
+
+    }
+}

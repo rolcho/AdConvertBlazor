@@ -10,6 +10,7 @@ namespace AdConvert
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddSingleton<AdHandler>();
+            builder.Services.AddScoped<IFileHandler, FileHandler>();
             builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
             var app = builder.Build();

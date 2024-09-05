@@ -1,25 +1,58 @@
 ﻿@page "/"
+
 @using System.Text
 @using AdConvert.Components.Ads
+@rendermode InteractiveServer
+
+@inject IFileHandler FileService
 
 <PageTitle>Hirdetés átalakító</PageTitle>
 
-<AdList Ads="@ads" />
+<div class="flex flex-col items-start max-w-xl gap-4 px-4 py-8 mx-auto">
+
+    <div
+        class="flex items-center w-full border-2 rounded-xl border-slate-400 hover:bg-slate-300 hover:text-slate-600 text-slate-400">
+        <div class="p-4 rounded-md bg-slate-400">
+            <span class="font-black text-white uppercase" id="inputGroupFileAddon01">Apróhirdetés:</span>
+        </div>
+        <div class="w-full h-full p-4 m-0 ">
+            <InputFile id="inputGroupFile01" class="hidden" OnChange="HandleFileSelected"></InputFile>
+            <label class="uppercase " for="inputGroupFile01">
+                @if (fileName is not null)
+                {
+                    <p>@fileName</p>
+                }
+                else
+                {
+                    <p>Válassz ki egy fájlt...</p>
+                }
+            </label>
+        </div>
+    </div>
+
+    @if (ads is not null && fileName is not null)
+    {
+        <AdsDownload ads="@ads" fileName="@fileName" />
+    }
+
+    <AdList Ads="@ads" />
+
+</div>
+
 
 @code {
 
-    private readonly AdHandler adHandler = new AdHandler();
-    private string? text;
     private List<AdData>? ads;
+    private string? fileName;
 
-    protected override void OnInitialized()
+    private async Task HandleFileSelected(InputFileChangeEventArgs e)
     {
-        string filePath = "wwwroot/sample.txt";
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        byte[] ansiBytes = File.ReadAllBytes(filePath);
-        byte[] utf8Bytes = Encoding.Convert(Encoding.GetEncoding("windows-1250"), Encoding.UTF8, ansiBytes);
-        text = adHandler.ReplaceText(Encoding.UTF8.GetString(utf8Bytes));
-        ads = adHandler.ConvertText(text);
+        var file = e.File;
+        if (file != null)
+        {
+            ads = await FileService.ReadFileContentAsync(file);
+            fileName = file.Name;
+            StateHasChanged();
+        }
     }
-
 }
