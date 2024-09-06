@@ -10,7 +10,7 @@ public class AdData
     public static readonly Dictionary<AdType, string> Styles =
         new()
         {
-            { AdType.Plain, "text-black py-4 border-b-2 border-black w-full" },
+            { AdType.Plain, "text-black pb-2 border-b-2 border-black w-full" },
             { AdType.HighlightBackground, "bg-red-600 text-white p-4 w-full" },
             { AdType.YellowBackground, "text-black p-4 bg-yellow-400 w-full" },
             { AdType.BlackBackground, "text-white p-4 bg-black w-full" },
