@@ -4,17 +4,26 @@
 
 @inherits ComponentBase
 
-<button class="w-full p-4 font-black text-white text-2xl rounded-md bg-slate-400 hover:bg-slate-300 hover:text-slate-600"
+<button
+    class="w-full p-4 text-2xl font-black text-white rounded-md bg-slate-400 hover:bg-slate-300 hover:text-slate-600"
     @onclick="CopyToClipboard">
-    @if (!pasted) {
+    @if (error)
+    {
         <p>
-            Hirdetések másolása vágólapra
+            Hiba történt
         </p>
     }
-    else {
+    else if (pasted)
+    {
         <p>
             Hirdetések átmásolva
-    </p>
+        </p>
+    }
+    else
+    {
+        <p>
+            Másolás a vágólapra
+        </p>
     }
 
 </button>
@@ -23,23 +32,36 @@
     [Parameter]
     public List<AdData>? ads { get; set; }
 
-    bool pasted = false;
+    private bool pasted = false;
+
+    private bool error = false;
 
     async Task CopyToClipboard()
     {
-        if (ads is null) return;
+        if (ads is null)
+        {
+            error = true;
+            await WaitAndResetState();
+            return;
+        }
         try
         {
             await ClipboardService.WriteTextAsync(FileHandler.CreateText(ads));
             pasted = true;
-            StateHasChanged();
-            await Task.Delay(3000);
-            pasted = false;
-            StateHasChanged();
         }
         catch
         {
-            Console.WriteLine("Cannot write text to clipboard");
+            error = true;
         }
+        await WaitAndResetState();
+    }
+
+    async Task WaitAndResetState()
+    {
+        StateHasChanged();
+        await Task.Delay(3000);
+        pasted = false;
+        error = false;
+        StateHasChanged();
     }
 }
