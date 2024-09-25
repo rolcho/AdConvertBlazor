@@ -10,7 +10,7 @@ public interface IFileHandler
     string CreateText(List<AdData> ads);
 }
 
-public class FileHandler : IFileHandler
+public sealed class FileHandler : IFileHandler
 {
     private readonly AdHandler adHandler;
 

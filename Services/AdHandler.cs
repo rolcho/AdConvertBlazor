@@ -2,30 +2,14 @@ using AdConvert.Models;
 
 namespace AdConvert.Services;
 
-public class AdHandler
+public sealed class AdHandler
 {
     private static readonly Dictionary<string, string> ConversionTable =
         new()
         {
-            // { "Ö", "." },
-            // { "Ń", "Á" },
-            // { "…", "É" },
-            // { "Õ", "Í" },
-            // { "”", "Ó" },
-            // { "÷", "Ö" },
             { "<0x0150>", "Ő" },
-            // { "ŕ", "Ú" },
-            // { "‹", "Ü" },
             { "<0x0170>", "Ű" },
-            // { "Ř", "Ű" },
-            // { "Š", "á" },
-            // { "ť", "é" },
-            // { "Ū", "í" },
-            // { "ů", "ó" },
-            // { "Ų", "ö" },
             { "<0x0151>", "ő" },
-            // { "ķ", "ú" },
-            // { "Ł", "ü" },
             { "<0x0171>", "ű" },
             { "<ANSI-WIN>\n", "" },
             { "<ANSI-WIN>\r", "" },
@@ -75,8 +59,7 @@ public class AdHandler
 
         foreach (var line in lines)
         {
-            var shortLine = line.Replace("<pstyle:APRO\\:", "");
-            shortLine = shortLine.Replace("<pstyle:APRÓ\\:", "");
+            var shortLine = line.Replace("<pstyle:APRO\\:", "").Replace("<pstyle:APRÓ\\:", "");
 
             if (shortLine.Contains("sorszam>") || shortLine.Contains("SOR>"))
             {
@@ -97,7 +80,7 @@ public class AdHandler
                 continue;
             }
 
-            if (currentAd.AdText != "")
+            if (currentAd.AdText is not "")
             {
                 currentAd.AdText += " " + shortLine;
                 continue;
