@@ -2,6 +2,12 @@ using AdConvert.Models;
 
 namespace AdConvert.Services;
 
+public class StringPair
+{
+    public required string Original { get; set; }
+    public required string Fixed { get; set; }
+}
+
 public sealed class AdHandler
 {
     private static readonly Dictionary<string, string> ConversionTable =
@@ -33,6 +39,22 @@ public sealed class AdHandler
             { "KARIKAS\\", AdType.Circle },
         };
 
+    private static readonly List<StringPair> FixedStyleStrings =
+    [
+        new StringPair { Original = "<pstyle:APRÓ\\:", Fixed = "" },
+        new StringPair { Original = "<pstyle:APRO\\:", Fixed = "" },
+        new StringPair { Original = "KERETES apróhird", Fixed = "FKERETES" },
+        new StringPair { Original = "KERETES apró SORSZÁM", Fixed = "fkeretesSOR" },
+        new StringPair { Original = "NEGA apró", Fixed = "NEGATIV" },
+        new StringPair { Original = "Nega APRÓ", Fixed = "negativ" },
+        new StringPair { Original = "Nega SORSZÁM", Fixed = "negativSOR" },
+        new StringPair { Original = "SÁRGA apróhird", Fixed = "SARGA" },
+        new StringPair { Original = "SÁRGA apró", Fixed = "sarga" },
+        new StringPair { Original = "APRÓ sorszám", Fixed = "sorszam" },
+        new StringPair { Original = "PIFKERETES", Fixed = "PKERETES" },
+        new StringPair { Original = "PIKERETES", Fixed = "pkeretes" },
+    ];
+
     private static AdType StyleSelector(string line)
     {
         AdType? adType = StyleTable.FirstOrDefault(style => line.Contains(style.Key)).Value;
@@ -51,6 +73,16 @@ public sealed class AdHandler
         return text;
     }
 
+    public string FixStyles(string line, List<StringPair> stringPairs)
+    {
+        foreach (var stringPair in stringPairs)
+        {
+            line = line.Replace(stringPair.Original, stringPair.Fixed);
+        }
+
+        return line;
+    }
+
     public List<AdData> ConvertText(string text)
     {
         var lines = text.Split("\n");
@@ -59,16 +91,7 @@ public sealed class AdHandler
 
         foreach (var line in lines)
         {
-            var shortLine = line.Replace("<pstyle:APRO\\:", "")
-                .Replace("<pstyle:APRÓ\\:", "")
-                .Replace("KERETES apróhird", "FKERETES")
-                .Replace("KERETES apró SORSZÁM", "fkeretesSOR")
-                .Replace("NEGA apró", "NEGATIV")
-                .Replace("Nega APRÓ", "negativ")
-                .Replace("Nega SORSZÁM", "negativSOR")
-                .Replace("SÁRGA apróhird", "SARGA")
-                .Replace("SÁRGA apró", "sarga");
-            Console.WriteLine(shortLine);
+            var shortLine = FixStyles(line, FixedStyleStrings);
 
             if (shortLine.Contains("sorszam>") || shortLine.Contains("SOR>"))
             {
