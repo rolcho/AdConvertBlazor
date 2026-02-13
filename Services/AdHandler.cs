@@ -59,7 +59,16 @@ public sealed class AdHandler
 
         foreach (var line in lines)
         {
-            var shortLine = line.Replace("<pstyle:APRO\\:", "").Replace("<pstyle:APRÓ\\:", "");
+            var shortLine = line.Replace("<pstyle:APRO\\:", "")
+                .Replace("<pstyle:APRÓ\\:", "")
+                .Replace("KERETES apróhird", "FKERETES")
+                .Replace("KERETES apró SORSZÁM", "fkeretesSOR")
+                .Replace("NEGA apró", "NEGATIV")
+                .Replace("Nega APRÓ", "negativ")
+                .Replace("Nega SORSZÁM", "negativSOR")
+                .Replace("SÁRGA apróhird", "SARGA")
+                .Replace("SÁRGA apró", "sarga");
+            Console.WriteLine(shortLine);
 
             if (shortLine.Contains("sorszam>") || shortLine.Contains("SOR>"))
             {
